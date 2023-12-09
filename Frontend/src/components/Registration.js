@@ -3,6 +3,15 @@ import { ref, uploadBytes } from 'firebase/storage';
 import { v4 } from 'uuid';
 import { img_viddb } from '../config';
 
+
+function generateRandomString(length) {
+  const uuidString = v4().replace(/-/g, ''); // Remove hyphens from the UUID
+  return uuidString.slice(0, length);
+}
+
+// Example: Generate a random string of length 10
+const IDPers = generateRandomString(10);
+
 export default function Registration() {
   const [user, setUser] = useState({
     upld: '',
@@ -19,17 +28,17 @@ export default function Registration() {
 
   const postdata = async (e) => {
     e.preventDefault();
-    const { upld, name, licence } = user;
-
-    if (name && licence) {
-      const res = await fetch('https://numplate-face-default-rtdb.firebaseio.com/num-face.json', {
-        method: 'POST',
+    const { name, licence } = user;
+  
+    if (name && licence) { // Specify your custom ID here
+      const res = await fetch(`https://numplate-face-default-rtdb.firebaseio.com/num-face/${IDPers}.json`, {
+        method: 'PUT', // Use PUT to update with the specified ID
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ name, licence }),
       });
-
+  
       if (res) {
         setUser({
           upld: '',
@@ -42,6 +51,7 @@ export default function Registration() {
       alert('Please fill the form');
     }
   };
+  
 
   const handleUpload = async (e) => {
     e.preventDefault();
@@ -51,12 +61,12 @@ export default function Registration() {
       return;
     }
 
-    const img_reg = ref(img_viddb, `Registration/${v4()}`);
+    const img_reg = ref(img_viddb, `Registration/${IDPers}`);
     try {
 
       const ress=await uploadBytes(img_reg, selected);
       if(ress){
-      alert("photo uploded successfully")
+      alert("Photo uploaded successfully")
       setSelect(null);
       }
     } catch (error) {
@@ -97,8 +107,8 @@ export default function Registration() {
             name="licence"
             onChange={getuserData}
             value={user.licence}
-            placeholder="Enter your Vehicle Licence Number"
-            className="licence"
+            placeholder="Enter your Vehicle License Number"
+            className="license"
             required
           />
         </div>

@@ -1,7 +1,18 @@
 import cv2
 import requests
 import json
+from firebase_admin import storage
 
+
+def download_image_from_storage(image_path_in_storage, local_file_path):
+    bucket = storage.bucket()
+    blob = bucket.blob(image_path_in_storage)
+
+    try:
+        blob.download_to_filename(local_file_path)
+        print(f"Image downloaded successfully to {local_file_path}")
+    except Exception as e:
+        print(f"Error downloading image: {e}")
 
 #### Preproccessing for OCR ####
 

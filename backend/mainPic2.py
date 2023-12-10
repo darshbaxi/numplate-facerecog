@@ -1,6 +1,6 @@
 import firebase_admin
 from firebase_admin import credentials, storage, db
-import face_recognition
+# import face_recognition
 from utils import final_processed, OCR_results, download_image_from_storage
 from roboflow import Roboflow
 import os
@@ -29,7 +29,7 @@ def Validation(UpfileName):
 
     # model.predict(picture, confidence=20, overlap=30).save("backend/prediction.jpg")
 
-
+    # print(detections)
 
 
     for prediction in detections['predictions']:

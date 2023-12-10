@@ -28,19 +28,19 @@ function Home() {
       try {
         const res = await uploadBytes(img_vidref, selectedFile);
         if (res) {
-          window.location.reload();
+          // window.location.reload();
           setSelectedFile(null); 
         }
       } catch (error) {
         console.error('Error uploading file:', error);
         
       }
-
+      console.log("hi")
       try {
         const response = await axios.post('http://localhost:8000/process_data', { data: UpFileName });
-
+        console.log("succ")
         // Log the response from the FastAPI backend
-        console.log('Response from FastAPI:', response.data);
+        console.log('Response from FastAPI:', response);
         
         // Access the celeb_ids directly
         const celebIdsString = response.data.celeb_ids;

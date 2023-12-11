@@ -1,6 +1,6 @@
 import firebase_admin
 from firebase_admin import credentials, storage, db
-import face_recognition
+# import face_recognition
 from utils import final_processed, OCR_results, download_image_from_storage
 from roboflow import Roboflow
 import os
@@ -75,46 +75,25 @@ def Validation(UpfileName):
         result_id, result_name = find_match(ocr_text_string)
 
         if result_id is not None:
+            download_image_from_storage('Registration/' + result_id, 'validating.png')
 
-            print(f"Match found! ID: {result_id}, Name: {result_name}")
-            return(result_name)
+            validation_image = face_recognition.load_image_file("validating.png")
+            original_image = face_recognition.load_image_file(picture)
+            try:
+                validation_image_encoding = face_recognition.face_encodings(validation_image)[0]
+                original_image_encoding = face_recognition.face_encodings(original_image)[0]
+                results = face_recognition.compare_faces([validation_image_encoding], original_image_encoding)
+                print(results)
+            except IndexError:
+                print("I wasn't able to locate any faces in at least one of the images. Check the image files. Aborting...")
+                quit()
+            os.remove('test.png')
+            os.remove('validating.png')
+            if(results[0]==True):
+                print(f"Match found! ID: {result_id}, Name: {result_name} and Faces matches also found")
+                return (result_name,results[0])
         else:
             return("No match found.")
 
-        
 
 
-
-
-
-    # download_image_from_storage('Registration/GJ01234', 'backend/validating.png')
-
-
-    # # Load the jpg files into numpy arrays
-    # Harry_image = face_recognition.load_image_file("backend/validating.png")
-    # unknown_image = face_recognition.load_image_file(picture)
-
-
-    # # Get the face encodings for each face in each image file
-    # # Since there could be more than one face in each image, it returns a list of encodings.
-    # # But since I know each image only has one face, I only care about the first encoding in each image, so I grab index 0.
-    # try:
-    #     Harry_face_encoding = face_recognition.face_encodings(Harry_image)[0]
-    #     unknown_face_encoding = face_recognition.face_encodings(unknown_image)[0]
-    # except IndexError:
-    #     print("I wasn't able to locate any faces in at least one of the images. Check the image files. Aborting...")
-    #     quit()
-
-    # known_faces = [
-    #     Harry_face_encoding
-    # ]
-
-    # # results is an array of True/False telling if the unknown face matched anyone in the known_faces array
-    # results = face_recognition.compare_faces(known_faces, unknown_face_encoding)
-
-    # print("Is the unknown face a picture of Sarah Baxi? {}".format(results[0]))
-    # print("Is the unknown face a new person that we've never seen before? {}".format(not True in results))
-
-
-    # os.remove("backend/validating.png")
-    # os.remove("backend/test.png")

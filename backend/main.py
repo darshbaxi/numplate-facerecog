@@ -30,10 +30,14 @@ async def root():
 async def process_data(item: Item):
     print(item)
     processed_data = item.data
-    celeb_ids = Validation(processed_data)
+    print("actual")
+    print(processed_data)
+    celeb_ids,result = Validation(processed_data)
     print("hello")
     print(celeb_ids)
-    return {"celeb_ids": celeb_ids}
+    return {"celeb_ids": celeb_ids,
+            "Faces match":result
+            }
     # return {"processed_data": processed_data}
 
 # @app.get("/process")

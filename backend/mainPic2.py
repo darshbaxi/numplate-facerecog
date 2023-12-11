@@ -1,6 +1,6 @@
 import firebase_admin
 from firebase_admin import credentials, storage, db
-# import face_recognition
+import face_recognition
 from utils import final_processed, OCR_results, download_image_from_storage
 from roboflow import Roboflow
 import os
@@ -75,6 +75,7 @@ def Validation(UpfileName):
         result_id, result_name = find_match(ocr_text_string)
 
         if result_id is not None:
+
             print(f"Match found! ID: {result_id}, Name: {result_name}")
             return(result_name)
         else:

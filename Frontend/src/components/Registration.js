@@ -3,13 +3,11 @@ import { ref, uploadBytes } from 'firebase/storage';
 import { v4 } from 'uuid';
 import { img_viddb } from '../config';
 
-
 function generateRandomString(length) {
   const uuidString = v4().replace(/-/g, ''); // Remove hyphens from the UUID
   return uuidString.slice(0, length);
 }
 
-// Example: Generate a random string of length 10
 const IDPers = generateRandomString(10);
 
 export default function Registration() {
@@ -26,57 +24,46 @@ export default function Registration() {
     setUser({ ...user, [name]: value });
   };
 
-  const postdata = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, licence } = user;
-  
-    if (name && licence) { // Specify your custom ID here
+
+    if (!selected || !user.name || !user.licence) {
+      alert('Please fill out all the fields and upload a file');
+      return;
+    }
+
+    try {
+      // Upload image
+      const img_reg = ref(img_viddb, `Registration/${IDPers}`);
+      await uploadBytes(img_reg, selected);
+
+      // Save data
       const res = await fetch(`https://numplate-face-default-rtdb.firebaseio.com/num-face/${IDPers}.json`, {
-        method: 'PUT', // Use PUT to update with the specified ID
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, licence }),
+        body: JSON.stringify({ name: user.name, licence: user.licence }),
       });
-  
+
       if (res) {
         setUser({
           upld: '',
           name: '',
           licence: '',
         });
+        setSelect(null);
+        alert('Data submitted successfully');
         window.location.reload();
       }
-    } else {
-      alert('Please fill the form');
-    }
-  };
-  
-
-  const handleUpload = async (e) => {
-    e.preventDefault();
-
-    if (!selected) {
-      alert('Please select a file');
-      return;
-    }
-
-    const img_reg = ref(img_viddb, `Registration/${IDPers}`);
-    try {
-
-      const ress=await uploadBytes(img_reg, selected);
-      if(ress){
-      alert("Photo uploaded successfully")
-      setSelect(null);
-      }
     } catch (error) {
-      console.error('Error uploading file:', error);
+      console.error('Error:', error);
     }
   };
 
   return (
     <div>
-      <form className="Registration" onSubmit={postdata}>
+      <form className="Registration" onSubmit={handleSubmit}>
         <div className="header">
           <h1>Registration</h1>
         </div>
@@ -88,9 +75,6 @@ export default function Registration() {
             className="upload"
             required
           />
-          <button type="button" onClick={handleUpload}>
-            Upload
-          </button>
           <br />
           <input
             type="text"

@@ -75,14 +75,19 @@ def Validation(UpfileName):
                 similarity_score = fuzz.ratio(input_licence, licence_to_compare)
                 
                 # You can adjust the threshold as needed (e.g., 80 for 80% similarity)
-                if similarity_score >= 80:
+                if similarity_score >= 30:
                     return key, value.get('name'),value.get('licence')
 
             # If no match is found, return None, None
-            return None, None
+            return None, None, None
+
+
 
 
         result_id, result_name, licenseNum = find_match(ocr_text_string)
+            # Your existing code that uses result_id, result_name, and licenseNum goes here
+
+
 
         if result_id is not None:
             download_image_from_storage('Registration/' + result_id, 'validating.png')

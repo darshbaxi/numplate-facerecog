@@ -49,7 +49,6 @@ function Home() {
     };
     
         return (
-<<<<<<< HEAD
           <div>
           <form className='validate'>
             <div className='header'>
@@ -57,29 +56,23 @@ function Home() {
             </div>
             <div className='upload'>
               <input type='file' onChange={(e) => setSelectedFile(e.target.files[0])} />
-              <button onClick={handleUpload}>Upload Video</button>
+              <button onClick={handleUpload}>Upload Photo</button>
             </div>
           </form>
     
           {/* Display the response array on the page */}
-          <div className='response'>
-            {responseArray.map((item, index) => (
-              <div key={index}>{item}</div>
-            ))}
-          </div>
+          {responseArray.length > 0 && (
+        <div className="response">
+          {responseArray[0] === 0 && responseArray[1] === 0 && <div>No match found for license plate.</div>}
+          {responseArray[0] !== 0 && responseArray[1] !== 0 && (
+            <div>
+              Match found! Name: {responseArray[0]}, License Number: {responseArray[1]}
+            </div>
+          )}
+          {/* Add more conditions/messages as needed */}
         </div>
-      
-=======
-    <form className='validate'>
-      <div className='header'>
-        <h1>Upload the photo for validation</h1>
-      </div>
-      <div className='upload'>
-        <input type='file' onChange={(e)=>setSelectedFile(e.target.files[0])}/>
-        <button onClick={handleUpload}>Upload photo</button>
-      </div>
-    </form>
->>>>>>> 68779938ac50c5c4adb78218d3d024b0ca9aaf5a
+      )}
+        </div>
   )
 }
 export default Home;

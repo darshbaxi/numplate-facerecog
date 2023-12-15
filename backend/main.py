@@ -34,6 +34,5 @@ async def process_data(item: Item):
     processed_data = item.data
     print(processed_data)
     result = Validation(processed_data)
-    print("hello")
     print(result)
     return (result)

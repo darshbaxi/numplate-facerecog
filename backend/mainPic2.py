@@ -67,7 +67,7 @@ def Validation(UpfileName):
         def find_match(input_licence):
             data = ref.get()
             for key, value in data.items():
-                if input_licence == value.get('licence'):
+                if value.get('licence') and value.get('licence') in input_licence:
                     return key, value.get('name')
             return None, None
 

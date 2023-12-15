@@ -18,7 +18,8 @@ function Home() {
 
 
     const [selectedFile, setSelectedFile] = useState(null);
-        
+    const [responseArray, setResponseArray] = useState([]);
+    
     const UpFileName = `Files/${fileName}`
     const handleUpload = async (e) => {
       e.preventDefault();
@@ -35,40 +36,38 @@ function Home() {
         console.error('Error uploading file:', error);
         
       }
-      // console.log("hi")
       try {
         const response = await axios.post('http://localhost:8000/process_data', { data: UpFileName });
         // console.log("succ")
         // Log the response from the FastAPI backend
         console.log('Response from FastAPI:', response);
-        
-        // Access the celeb_ids directly
-        const celebIdsString = response.data.celeb_ids;
-        
-        // Log or use the string as needed
-        console.log('Celeb IDs:', celebIdsString);
-        console.log('result of faces:', response.data.result);
-          // window.location.reload();
+        setResponseArray(response.data); // Assuming the array is in the 'data' property of the response
       } catch (error) {
         console.error('Error in the FastAPI request:', error);
       }
   
     };
     
-    
-    
-    
-  
         return (
-    <form className='validate'>
-      <div className='header'>
-        <h1>Upload the video/photo for validation</h1>
-      </div>
-      <div className='upload'>
-        <input type='file' onChange={(e)=>setSelectedFile(e.target.files[0])}/>
-        <button onClick={handleUpload}>Upload Video</button>
-      </div>
-    </form>
+          <div>
+          <form className='validate'>
+            <div className='header'>
+              <h1>Upload the video/photo for validation</h1>
+            </div>
+            <div className='upload'>
+              <input type='file' onChange={(e) => setSelectedFile(e.target.files[0])} />
+              <button onClick={handleUpload}>Upload Video</button>
+            </div>
+          </form>
+    
+          {/* Display the response array on the page */}
+          <div className='response'>
+            {responseArray.map((item, index) => (
+              <div key={index}>{item}</div>
+            ))}
+          </div>
+        </div>
+      
   )
 }
 export default Home;

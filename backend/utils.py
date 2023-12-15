@@ -4,6 +4,10 @@ import json
 from firebase_admin import storage
 
 
+
+
+
+
 def download_image_from_storage(image_path_in_storage, local_file_path):
     bucket = storage.bucket()
     blob = bucket.blob(image_path_in_storage)

@@ -1,10 +1,11 @@
 import firebase_admin
 from firebase_admin import credentials, storage, db
-# import face_recognition
+import face_recognition
 from utils import final_processed, OCR_results, download_image_from_storage
 from roboflow import Roboflow
 import os
 import cv2
+from fuzzywuzzy import fuzz
 
 cred = credentials.Certificate('serviceAccountKey.json')
 firebase_admin.initialize_app(cred, {'storageBucket': 'numplate-face.appspot.com',
@@ -63,16 +64,25 @@ def Validation(UpfileName):
 
         os.remove(output_path)
 
-        # Function to find a match and return the ID and name
+
         def find_match(input_licence):
             data = ref.get()
+            
             for key, value in data.items():
-                if input_licence == value.get('licence'):
-                    return key, value.get('name')
+                licence_to_compare = value.get('licence')
+                
+                # Use ratio() from fuzzywuzzy to get a similarity score
+                similarity_score = fuzz.ratio(input_licence, licence_to_compare)
+                
+                # You can adjust the threshold as needed (e.g., 80 for 80% similarity)
+                if similarity_score >= 80:
+                    return key, value.get('name'),value.get('licence')
+
+            # If no match is found, return None, None
             return None, None
 
-        # Example usage
-        result_id, result_name = find_match(ocr_text_string)
+
+        result_id, result_name, licenseNum = find_match(ocr_text_string)
 
         if result_id is not None:
             download_image_from_storage('Registration/' + result_id, 'validating.png')
@@ -91,9 +101,11 @@ def Validation(UpfileName):
             os.remove('validating.png')
             if(results[0]==True):
                 print(f"Match found! ID: {result_id}, Name: {result_name} and Faces matches also found")
-                return (result_name,results[0])
+                return ([result_name, licenseNum])
+            else:
+                return([0,licenseNum])
         else:
-            return("No match found.")
+            return([0,0])
 
 
 

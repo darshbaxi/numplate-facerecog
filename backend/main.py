@@ -20,6 +20,8 @@ app.add_middleware(
 
 class Item(BaseModel):
     data: str
+
+
 @app.get("/")
 async def root():
     print("hello world")
@@ -30,16 +32,8 @@ async def root():
 async def process_data(item: Item):
     print(item)
     processed_data = item.data
-    print("actual")
     print(processed_data)
-    celeb_ids,result = Validation(processed_data)
+    result = Validation(processed_data)
     print("hello")
-    print(celeb_ids)
-    return {"celeb_ids": celeb_ids,
-            "Faces match":result
-            }
-    # return {"processed_data": processed_data}
-
-# @app.get("/process")
-# async def process_data():
-#
+    print(result)
+    return (result)

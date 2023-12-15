@@ -49,6 +49,7 @@ function Home() {
     };
     
         return (
+<<<<<<< HEAD
           <div>
           <form className='validate'>
             <div className='header'>
@@ -68,6 +69,17 @@ function Home() {
           </div>
         </div>
       
+=======
+    <form className='validate'>
+      <div className='header'>
+        <h1>Upload the photo for validation</h1>
+      </div>
+      <div className='upload'>
+        <input type='file' onChange={(e)=>setSelectedFile(e.target.files[0])}/>
+        <button onClick={handleUpload}>Upload photo</button>
+      </div>
+    </form>
+>>>>>>> 68779938ac50c5c4adb78218d3d024b0ca9aaf5a
   )
 }
 export default Home;

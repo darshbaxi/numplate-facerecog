@@ -82,8 +82,6 @@ def Validation(UpfileName):
             return None, None, None
 
 
-
-
         result_id, result_name, licenseNum = find_match(ocr_text_string)
             # Your existing code that uses result_id, result_name, and licenseNum goes here
 

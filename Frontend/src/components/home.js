@@ -52,7 +52,7 @@ function Home() {
           <div>
           <form className='validate'>
             <div className='header'>
-              <h1>Upload the video/photo for validation</h1>
+              <h1>Upload the photo for validation</h1>
             </div>
             <div className='upload'>
               <input type='file' onChange={(e) => setSelectedFile(e.target.files[0])} />

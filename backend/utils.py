@@ -101,3 +101,6 @@ def OCR_results(fileName):
     else:
         print("Error in OCR processing. Check the response for details.")
         return None
+
+
+

@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware  # Import the CORS middleware
 from pydantic import BaseModel
 from typing import List
 
-from mainPic2 import Validation
+from baxiCode import Validation
 
 app = FastAPI()
 

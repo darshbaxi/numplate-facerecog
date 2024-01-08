@@ -2,7 +2,7 @@ import firebase_admin
 from firebase_admin import credentials, storage, db
 import face_recognition
 from utils import final_processed, OCR_results, download_image_from_storage
-from roboflow import Roboflow
+# from roboflow import Roboflow
 import os
 import cv2
 from fuzzywuzzy import fuzz
@@ -41,9 +41,7 @@ def Validation(UpfileName):
         class_id = prediction['class_id']
         score = prediction['confidence']
         # box = (x1, y1, x2, y2)
-        x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-        detection_crop = image[y1:y2, x1:x2, :]
-        fin_processed = final_processed(detection_crop)
+
 
         filename = f'x1_{x1}.jpg'
 

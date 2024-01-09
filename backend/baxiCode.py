@@ -31,13 +31,15 @@ def license_Plate(frame):
     license_plates = license_plate_detector(frame)[0]
     for license_plate in license_plates.boxes.data.tolist():
         x1, y1, x2, y2, score, class_id = license_plate
+        print(license_plate)
         if (class_id == 0):
+            print('hi')
             detection_crop = frame[int(y1):int(y2), int(x1):int(x2), :]
             fin_processed = final_processed(detection_crop)
-            filename = f'x1_{x1}.jpg'
+            filename = f'x1_{x1}.png'
             output_path = os.path.join('output_images', filename)
             cv2.imwrite(output_path, fin_processed)
-            ocr_texts = OCR_results(fin_processed)
+            ocr_texts = OCR_results(output_path)
             print(ocr_texts)
             ocr_text_string = ' '.join(map(str, ocr_texts))
             print("The license plate number is:", ocr_text_string)
@@ -47,27 +49,16 @@ def license_Plate(frame):
                 fileName = f'{ocr_text_string}.jpg'
                 output_Path = os.path.join('output_images', fileName)
                 cv2.imwrite(output_Path, detection_crop)
-                os.remove(output_path)
+                # os.remove(output_path)
 
                 def find_match(input_licence):
                     data = ref.get()
-
                     for key, value in data.items():
-                        licence_to_compare = value.get('licence')
+                        if value.get('licence') and value.get('licence') in input_licence:
+                            return key, value.get('name')
+                    return None, None
 
-                        # Use ratio() from fuzzywuzzy to get a similarity score
-                        similarity_score = fuzz.ratio(input_licence, licence_to_compare)
-
-                        # You can adjust the threshold as needed (e.g., 80 for 80% similarity)
-                        if similarity_score >= 30:
-                            return key, value.get('name'), value.get('licence')
-
-                    # If no match is found, return None, None
-                    return None, None, None
-
-
-
-            # Example usage
+                    # Example usage
                     result_id, result_name = find_match(ocr_text_string)
 
                     if result_id is not None:

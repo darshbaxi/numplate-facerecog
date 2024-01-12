@@ -3,6 +3,28 @@ import requests
 import json
 from firebase_admin import storage
 
+def PaddleOCRLocal(file_path):
+    from PIL import Image
+    from paddleocr import PaddleOCR
+    import cv2
+
+    label = None
+
+    ocr_model = PaddleOCR(use_angle_cls = True, lang='en')
+    img = cv2.imread(file_path)
+
+    text_result = ocr_model.ocr(file_path)
+    # print(text_result)
+
+
+    for item in text_result:
+            for sub_item in item:
+                label = sub_item[1][0]
+                # print(label)
+
+    # img.show()
+    cv2.waitKey(0)
+    return label
 
 
 

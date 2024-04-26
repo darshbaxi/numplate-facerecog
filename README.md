@@ -20,11 +20,9 @@ The Secure School Pick-up System is a software solution designed to enhance the 
  The following individuals have contributed to the num-face project:
  1. [Kshitij Gupta](https://github.com/PrimeRick)
  - Role: Frontend Developer
- - Responsibilities: 
  2. [Darsh Baxi](https://github.com/darshbaxi)
  - Role: AI-ML Engineer
- - Responsibilities: 
  3. [Samarth Sahu](https://github.com/Samcoding5854)
  - Role: AI-ML Engineer
- - Responsibilities: 
+    
  

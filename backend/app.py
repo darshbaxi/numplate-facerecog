@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware  # Import the CORS middleware
 from pydantic import BaseModel
 from typing import List
 
-from baxiCode import Validation
+from backend.faceRecognition.validating import Validation
 
 app = FastAPI()
 

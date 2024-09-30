@@ -1,7 +1,7 @@
 import firebase_admin
 from firebase_admin import credentials, storage, db
 import face_recognition
-from utils import final_processed, OCR_results, download_image_from_storage, PaddleOCRLocal
+from backend.faceRecognition.OCRutils import final_processed, OCR_results, download_image_from_storage, PaddleOCRLocal
 import os
 import cv2
 from ultralytics import YOLO
@@ -12,8 +12,8 @@ cred = credentials.Certificate('serviceAccountKey.json')
 firebase_admin.initialize_app(cred, {'storageBucket': 'numplate-face.appspot.com',
                                      'databaseURL': 'https://numplate-face-default-rtdb.firebaseio.com/'})
 
-coco_model = YOLO('yolov8n.pt')
-license_plate_detector = YOLO('weights/best.pt')
+coco_model = YOLO('carDetector.pt')
+license_plate_detector = YOLO('weights/licenseDetector.pt')
 ref = db.reference('num-face')
 
 
@@ -108,12 +108,12 @@ def faceRec(result_id, result_name,frame, licenseNum):
     results = [0,0]
     download_image_from_storage('Registration/' + result_id, 'validating.png')
 
-    validation_image = face_recognition.load_image_file("validating.png")
-    original_image = face_recognition.load_image_file(output_path_checkFace)
+    validation_image = faceRecognition.load_image_file("validating.png")
+    original_image = faceRecognition.load_image_file(output_path_checkFace)
     try:
-        validation_image_encoding = face_recognition.face_encodings(validation_image)[0]
-        original_image_encoding = face_recognition.face_encodings(original_image)[0]
-        results = face_recognition.compare_faces([validation_image_encoding], original_image_encoding)
+        validation_image_encoding = faceRecognition.face_encodings(validation_image)[0]
+        original_image_encoding = faceRecognition.face_encodings(original_image)[0]
+        results = faceRecognition.compare_faces([validation_image_encoding], original_image_encoding)
         print(results)
     except IndexError:
         print("I wasn't able to locate any faces in at least one of the images. Check the image files. Aborting...")
